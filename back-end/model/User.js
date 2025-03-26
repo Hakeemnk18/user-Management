@@ -13,6 +13,10 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    roll:{
+        type:String,
+        enum:["admin","user"]
     }
 })
 
