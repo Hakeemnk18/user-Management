@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Navbar from './Navbar'
 
 const Login = () => {
 
@@ -22,7 +23,7 @@ const Login = () => {
         console.log(json)
     }
   return (
-    <div>
+    <div >
       <form action="">
         <input 
         type="text" 
