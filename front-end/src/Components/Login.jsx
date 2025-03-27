@@ -19,6 +19,7 @@ const Login = () => {
     
 
     const loginSubmit = async(e)=>{
+      try {
         e.preventDefault()
         
         const response = await fetch("/api/login",{
@@ -33,6 +34,27 @@ const Login = () => {
         })
 
         const json = await response.json()
+        
+        if(response.ok){
+          
+          localStorage.setItem('token', json.token);
+
+          dispatch(addUser({
+            name:json.name,
+            _id:json._id,
+            role:json.role
+          }))
+
+          toast.success('Login successful!');
+          navigate('/home');
+        }else{
+          toast.error('Something went wrong');
+        }
+
+      } catch (error) {
+        toast.error(error.message)
+      }
+        
         
     }
     const signSubmit = async(e)=>{
@@ -55,13 +77,16 @@ const Login = () => {
         
         
         if(json.ok){
+          localStorage.setItem('token', json.token);
+
           dispatch(addUser({
-            name:json._doc.name,
-            _id:json._doc._id,
-            roll:'admin'
+            name:json.name,
+            _id:json._id,
+            role:json.role
           }))
+
           toast.success("user add successfully")
-          navigate('/home')
+          navigate('/home');
         }else{
           console.log("inside else")
           toast.error(json.message || 'Something went wrong');
