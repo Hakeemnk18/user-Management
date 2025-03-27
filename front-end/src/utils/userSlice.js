@@ -16,7 +16,7 @@ const userSlice = createSlice({
         },
 
         removeUser:(state, action) => {
-            state.user = { name: '', _id: '', roll: '' };
+            state.user = { name: '', _id: '', role: '' };
         }
     }
 })
