@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
-import Navbar from './Navbar'
+import { useDispatch} from 'react-redux'
+import { addUser } from '../utils/userSlice'
+import {  toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const Login = () => {
 
@@ -7,6 +12,11 @@ const Login = () => {
     const [signInStatus,setSignInStatus] = useState("Login")
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+
+    
 
     const loginSubmit = async(e)=>{
         e.preventDefault()
@@ -26,21 +36,42 @@ const Login = () => {
         
     }
     const signSubmit = async(e)=>{
-      e.preventDefault()
+      try {
+        e.preventDefault()
       
-      const response = await fetch("/api/signup",{
-          method:"POST",
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-              email:email,
-              password:password,
-              name:name
-          }),
-      })
+        const response = await fetch("/api/signup",{
+            method:"POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email:email,
+                password:password,
+                name:name
+            }),
+        })
 
-      const json = await response.json()
+        const json = await response.json()
+        
+        
+        if(json.ok){
+          dispatch(addUser({
+            name:json._doc.name,
+            _id:json._doc._id,
+            roll:'admin'
+          }))
+          toast.success("user add successfully")
+          navigate('/home')
+        }else{
+          console.log("inside else")
+          toast.error(json.message || 'Something went wrong');
+        }
+        
+      } catch (error) {
+        console.log("inside error")
+        toast.error(error.message)
+      }
+      
       
   }
   return (
