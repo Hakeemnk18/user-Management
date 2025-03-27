@@ -13,8 +13,9 @@ const signUp = async(req,res)=>{
         const data = await user.save()
         console.log("user saved")
         console.log(data)
-        res.status(200).json({message:"welcome home"})
+        res.status(200).json({ok:true,...data})
     } catch (error) {
+        console.log("error in signUp "+error.message)
         res.status(404).json({message:"error in server"})
     }
 }
