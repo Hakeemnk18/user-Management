@@ -31,6 +31,7 @@ const signUp = async(req,res)=>{
             name: data.name,
             _id: data._id,
             role: data.role,
+            email:data.email
         })
     } catch (error) {
         console.log("error in signUp "+error.message)
@@ -69,6 +70,7 @@ const login = async(req,res)=>{
             name: user.name,
             _id: user._id,
             role: user.role,
+            email:user.email
 
         })
     } catch (error) {

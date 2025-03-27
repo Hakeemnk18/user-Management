@@ -1,6 +1,13 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 const Navbar = () => {
+  const user = useSelector((store)=> store?.user?.user)
+     if(user){
+      console.log("nav user ",user)
+     }else{
+      console.log("nav not user ",user)
+     }
   return (
     <div className='bg-gray-300 h-20 flex justify-between items-center'>
       <div className='px-20'>

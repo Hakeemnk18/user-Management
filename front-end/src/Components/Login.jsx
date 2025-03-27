@@ -42,7 +42,8 @@ const Login = () => {
           dispatch(addUser({
             name:json.name,
             _id:json._id,
-            role:json.role
+            role:json.role,
+            email:json.email
           }))
 
           toast.success('Login successful!');
@@ -82,7 +83,8 @@ const Login = () => {
           dispatch(addUser({
             name:json.name,
             _id:json._id,
-            role:json.role
+            role:json.role,
+            email:json.email
           }))
 
           toast.success("user add successfully")
