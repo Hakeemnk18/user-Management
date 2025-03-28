@@ -12,7 +12,7 @@ const userSlice = createSlice({
         },
 
         removeUser:(state, action) => {
-            state.user = { name: '', _id: '', role: '' };
+            state.user = null;
         }
     }
 })

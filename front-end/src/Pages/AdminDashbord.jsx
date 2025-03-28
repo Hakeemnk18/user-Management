@@ -74,11 +74,7 @@ const AdminDashboard = () => {
     }else{
         toast.error(json.message)
     }
-    // const updatedUsers = users.map((user) =>
-    //   user.id === selectedUser.id ? selectedUser : user
-    // );
-    // setUsers(updatedUsers);
-    // closeModal();
+    
   };
 
   return (
