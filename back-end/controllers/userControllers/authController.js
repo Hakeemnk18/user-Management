@@ -14,7 +14,8 @@ const signUp = async(req,res)=>{
         const user = new User({
             name:name,
             password:password,
-            email:email
+            email:email,
+            role:"user"
         })
         const data = await user.save()
         
