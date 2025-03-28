@@ -49,12 +49,36 @@ const AdminDashboard = () => {
   };
 
   // Handle Save Edited User
-  const saveUser = () => {
-    const updatedUsers = users.map((user) =>
-      user.id === selectedUser.id ? selectedUser : user
-    );
-    setUsers(updatedUsers);
-    closeModal();
+  const saveUser = async () => {
+
+    console.log("inside save user")
+    console.log(selectedUser)
+    const token = localStorage.getItem('token')
+    const response = await fetch('/api/admin/editUser',{
+        method:"PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, 
+        },
+        body: JSON.stringify(selectedUser),
+    })
+    const json = await response.json()
+    if(json.ok){
+        console.log("backend updated")
+        const updatedUsers = users.map((user)=>(
+            user.id === selectedUser.id ? json.user : user
+        ))
+
+        setUsers(updatedUsers)
+        closeModal();
+    }else{
+        toast.error(json.message)
+    }
+    // const updatedUsers = users.map((user) =>
+    //   user.id === selectedUser.id ? selectedUser : user
+    // );
+    // setUsers(updatedUsers);
+    // closeModal();
   };
 
   return (
