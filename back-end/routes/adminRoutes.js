@@ -6,5 +6,6 @@ const router = express.Router()
 
 router.get('/',adminController.getUsers)
 router.put('/editUser',auth,adminController.editUser)
+router.delete('/deleteUser',adminController.deleteUser)
 
 module.exports = router

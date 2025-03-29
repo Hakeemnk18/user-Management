@@ -43,9 +43,34 @@ const AdminDashboard = () => {
   };
 
   // Handle Delete User
-  const deleteUser = (id) => {
-    const updatedUsers = users.filter((user) => user.id !== id);
-    setUsers(updatedUsers);
+  const deleteUser = async (id) => {
+    try {
+        const token = localStorage.getItem('token')
+        console.log(id,"inside delete")
+        const response = await fetch('/api/admin/deleteUser',{
+            method:"DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`, 
+            },
+            body: JSON.stringify({id})
+        })
+
+        const json = await response.json()
+        if(json.ok){
+            console.log(json , "inside delete")
+            const updatedUsers = users.filter((user) => user.id !== json.user._id);
+            setUsers(updatedUsers);
+            toast.success("deleted user")
+        }else{
+            toast.error(json.message)
+        }
+
+    } catch (error) {
+        console.log(error.message)
+        toast.error("server error")
+    }
+    
   };
 
   // Handle Save Edited User
@@ -108,7 +133,7 @@ const AdminDashboard = () => {
                     Edit
                   </button>
                   <button
-                    onClick={() => deleteUser(user.id)}
+                    onClick={() => deleteUser(user._id)}
                     className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
                   >
                     Delete

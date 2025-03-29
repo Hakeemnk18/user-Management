@@ -37,7 +37,27 @@ const editUser = async(req,res)=>{
     }
 }
 
+const deleteUser = async (req,res) =>{
+    try {
+        console.log("inside delete")
+        const { id } = req.body
+        console.log(req.body)
+        const users = await User.find({_id:id})
+        console.log(users)
+        const data = await User.findByIdAndDelete(id)
+
+        if(!data){
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json({ok:true, user:data})
+    } catch (error) {
+        console.log(error.message)
+        res.status(404).json({message:"error in server"})
+    }
+}
+
 module.exports = {
     getUsers,
-    editUser
+    editUser,
+    deleteUser
 }
