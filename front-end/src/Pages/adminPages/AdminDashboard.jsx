@@ -1,10 +1,13 @@
 import React from 'react'
+import Navbar from '../../Components/admin/navbar/AdminNavbar'
+import UsersTable from '../../Components/admin/userTable/UserTable'
 
 const AdminDashboard = () => {
   return (
-    <div className='text-9xl'>
-      Welcome
-    </div>
+    <>
+      <Navbar />
+      <UsersTable />
+    </>
   )
 }
 
