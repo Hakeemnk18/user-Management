@@ -24,8 +24,7 @@ const signUp = async(req,res)=>{
             JWT_SECRET,
             { expiresIn: '1h' } 
         );
-        console.log("user saved")
-        console.log(data)
+        
         res.status(200).json({
             ok: true,
             token,

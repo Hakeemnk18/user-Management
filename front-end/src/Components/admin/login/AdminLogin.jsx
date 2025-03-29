@@ -3,12 +3,20 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import validationSchema from "../../../schemas/adminValidationSchema";
+import { data, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addAdmin } from "../../../store/slices/adminSlice";
+
 
 
 const AdminLogin = () => {
-    console.log("admin login")
+    
     const [showPassword, setShowPassword] = useState(false)
     const [rememberMe, setRememberMe] = useState(false)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     const {
         register,
         handleSubmit,
@@ -17,10 +25,25 @@ const AdminLogin = () => {
         resolver: yupResolver(validationSchema),
     });
 
-    const onSubmit = (data) => {
-        console.log('Form Submitted:', data);
-        alert('Form submitted successfully!');
-    };
+    //login functionality
+    const adminLogin = async (data,e) => {
+      try {
+        e.preventDefault()
+        const response = await axios.post('/api/admin',data)
+        localStorage.setItem('adminToken', response.data.token);
+        dispatch(addAdmin(response.data.user))
+        toast.success(response.data.message)
+        navigate('/admin/dashboard')
+      } catch (error) {
+        if (error.response) {
+          
+          toast.error(error.response.data.message || 'An error occurred');
+        } else {
+          
+          toast.error('Something went wrong. Please try again.');
+        }
+      }
+    }
   
     return (
       <div className="flex items-center justify-center min-h-screen w-full">
@@ -56,7 +79,7 @@ const AdminLogin = () => {
               <p className="text-gray-500 text-sm mb-6">Please log in to access the admin dashboard and manage the platform.</p>
   
               {/* Form */}
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={handleSubmit(adminLogin)}>
                 {/* Username field */}
                 <div className="mb-4">
                   <input
