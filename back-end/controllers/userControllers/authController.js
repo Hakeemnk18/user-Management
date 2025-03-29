@@ -63,7 +63,7 @@ const login = async(req,res)=>{
           JWT_SECRET,
           { expiresIn: '1h' } 
         );
-        console.log("token ",token)
+        //console.log("token ",token)
 
         res.status(200).json({
             ok: true,
