@@ -1,12 +1,13 @@
 const express = require('express')
 const adminController = require("../controllers/adminControllers/adminController")
 const loginController = require('../controllers/adminControllers/loginController')
+const adminAuth = require('../middleware/adminAuth')
 const auth = require('../middleware/authMiddleWare')
-
 const router = express.Router()
 
 router.post('/',loginController.login)
-router.put('/editUser',auth,adminController.editUser)
+router.get('/dashboard',adminAuth,adminController.getUsers)
+router.put('/editUser',adminController.editUser)
 router.delete('/deleteUser',adminController.deleteUser)
 
 module.exports = router

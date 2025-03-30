@@ -1,102 +1,71 @@
-
-import { useState } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react"
 import { Search, Upload, Layers, Settings2, Plus, ChevronDown } from "lucide-react"
+import axios from "axios"
+import { toast } from "react-toastify";
 
 
 
 export default function UsersTable() {
-  const [users] = useState([
-    {
-      id: 1,
-      name: "Scot Carroll",
-      organization: "O'Reilly-Treutel",
-      email: "carroll_scott@example.net",
-      albums: 10,
-      photos: 380,
-      avatar: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: 2,
-      name: "Barbra Nolan",
-      organization: "Rogahn and Sons",
-      email: "barbra.nolan@example.org",
-      albums: 5,
-      photos: 173,
-      avatar: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: 3,
-      name: "Keith Wyman",
-      organization: "Zemlak Inc and 1 others",
-      email: "keith.wyman@example.com",
-      albums: 7,
-      photos: 985,
-      avatar: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: 4,
-      name: "Gustavo Kulas",
-      organization: "Rau-White and 1 others",
-      email: "kulas.gustavo@example.net",
-      albums: 7,
-      photos: 351,
-      avatar: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: 5,
-      name: "Thad Tillman",
-      organization: "Bauch Inc",
-      email: "tillman.thad@example.com",
-      albums: 7,
-      photos: 642,
-      avatar: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: 6,
-      name: "Abel O'Conner",
-      organization: "Fraim Group",
-      email: "abel.oconner@example.org",
-      albums: 4,
-      photos: 526,
-      avatar: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: 7,
-      name: "Wilmer Fadel",
-      organization: "Fern, Gusikowski and Keruke and 1 others",
-      email: "wilmer.fadel@example.net",
-      albums: 8,
-      photos: 218,
-      avatar: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: 8,
-      name: "Mariella Pagac",
-      organization: "Christiansen-Kilback",
-      email: "pagac_mariella@example.com",
-      albums: 10,
-      photos: 434,
-      avatar: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: 9,
-      name: "Alise Hansen",
-      organization: "Upton LLC and 1 others",
-      email: "alise_hansen@example.com",
-      albums: 6,
-      photos: 569,
-      avatar: "/placeholder.svg?height=40&width=40",
-    },
-    {
-      id: 10,
-      name: "Naoma Wyman",
-      organization: "Emser-Cummings and 1 others",
-      email: "wyman.naoma@example.com",
-      albums: 3,
-      photos: 416,
-      avatar: "/placeholder.svg?height=40&width=40",
-    },
-  ])
+  const [users,setUsers] = useState([])
+  const [isModal,setIsModal] = useState(false)
+  const [selectedUser,setSelectedUser] = useState({
+    name:'',
+    email:''
+  })
+
+  const fetchUser = async()=>{
+
+    try {
+      const token = localStorage.getItem('adminToken')
+      const response = await axios.get('/api/admin/dashboard',{
+        headers:{
+          Authorization: `Bearer ${token}`,
+        }
+      });
+      setUsers(response.data.users)
+    } catch (error) {
+      
+    }
+  } 
+
+  const handleModal = (user) => {
+    if(!isModal){
+      setIsModal(true)
+      setSelectedUser(user)
+    }
+    return
+  }
+
+  const handleEdit = async(e) => {
+
+    try {
+      e.preventDefault()
+      const token = localStorage.getItem('adminToken')
+      const response =await axios.put('/api/admin/editUser',selectedUser,{
+        headers:{
+          Authorization: `Bearer ${token}`,
+        }
+      })
+      setIsModal(false)
+      let updateUser = response.data.user
+      console.log("update user ",updateUser)
+      const filter = users.map((use)=>{
+        return use._id === updateUser._id ? updateUser : use
+      })
+      setUsers(filter)
+      toast.success("user updated")
+    } catch (error) {
+      console.log(error.message)
+      toast.error(error.message)
+    }
+  }
+
+  useEffect(()=>{
+    fetchUser()
+  },[])
 
   return (
     <div className="min-h-screen bg-gradient-to-tl from-indigo-950 to-gray-900 text-gray-100 p-6 pt-25">
@@ -143,32 +112,75 @@ export default function UsersTable() {
       </div>
     
       <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-        <div className="grid grid-cols-[auto_1fr_auto_auto] gap-4 px-6 py-3 border-b border-gray-700 text-gray-400 text-sm">
-          <div>Name</div>
-          <div>Email</div>
-          <div className="text-right">Albums</div>
-          <div className="text-right">Photos</div>
-        </div>
+        
         <div className="divide-y divide-gray-700">
           {users.map((user) => (
             <div
               key={user.id}
               className="grid grid-cols-[auto_1fr_auto_auto] gap-4 px-6 py-4 items-center hover:bg-gray-750"
             >
-              <div className="flex items-center">
+             
+
+             <div className="flex items-center space-x-3 w-full">
                 <img
                   src={user.avatar || "/placeholder.svg"}
                   alt={`${user.name}'s avatar`}
-                  className="w-10 h-10 rounded-full mr-3 bg-gray-700"
+                  className="w-10 h-10 rounded-full mr-3 bg-gray-700 "
                 />
-                <div>
-                  <div className="font-medium text-white">{user.name}</div>
-                  <div className="text-sm text-gray-400">{user.organization}</div>
+                <div className="">
+                  <div className="font-medium text-white mr-3">{user.name}</div>
+                  
                 </div>
+                <div className="text-gray-300 self-center ">{user.email}</div>
               </div>
-              <div className="text-gray-300 self-center">{user.email}</div>
-              <div className="text-gray-300 text-right">{user.albums}</div>
-              <div className="text-gray-300 text-right">{user.photos}</div>
+              
+              <div className="text-gray-300 text-right"
+                onClick={() => handleModal(user)}
+              >
+              <FontAwesomeIcon icon={faEdit} className="text-blue-500 cursor-pointer" />
+              </div>
+              <div className="text-gray-300 text-right">
+              <FontAwesomeIcon icon={faTrash} className="text-blue-500 cursor-pointer" />
+              </div>
+
+              {/* modal */}
+              {
+                isModal && 
+                <div className="w-[280px] bg-white p-4 shadow-lg rounded-lg absolute bottom-80 right-40">
+  
+                <button
+                  className="absolute top-2 right-4 text-gray-500 hover:text-red-500 font-bold"
+                  onClick={() => setIsModal(false)} // Replace with your close function
+                >
+                  ✕
+                </button>
+
+                
+                <form action="" className="flex flex-col space-y-3 mt-10">
+                  <input
+                    type="text"
+                    placeholder="Enter your name"
+                    value={selectedUser.name}
+                    onChange={(e)=> setSelectedUser({...selectedUser,name:e.target.value})}
+                    className="text-gray-500 placeholder-gray-500 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={selectedUser.email}
+                    onChange={(e)=> setSelectedUser({...selectedUser,email:e.target.value})}
+                    className="text-gray-500 placeholder-gray-500 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    type="submit"
+                    className="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
+                    onClick={handleEdit}
+                  >
+                    Submit
+                  </button>
+                </form>
+              </div>
+              }
             </div>
           ))}
         </div>
