@@ -10,7 +10,9 @@ import { toast } from "react-toastify";
 
 export default function UsersTable() {
   const [users,setUsers] = useState([])
+  const [originalUsers,setOriginalUsers] = useState([])
   const [isModal,setIsModal] = useState(false)
+  const [search,setSearch] = useState('')
   const [selectedUser,setSelectedUser] = useState({
     name:'',
     email:''
@@ -26,8 +28,9 @@ export default function UsersTable() {
         }
       });
       setUsers(response.data.users)
+      setOriginalUsers(response.data.users)
     } catch (error) {
-      
+      toast.error(error.message)
     }
   } 
 
@@ -37,6 +40,20 @@ export default function UsersTable() {
       setSelectedUser(user)
     }
     return
+  }
+
+  const handleSearch = () => {
+    
+    if(search.trim().length === 0){
+      
+      setUsers(originalUsers)
+    }
+    const filter = originalUsers.filter((user) => {
+      return user.name.toLowerCase().startsWith(search.toLowerCase())
+    })
+
+    setUsers(filter)
+    
   }
 
   const handleEdit = async(e) => {
@@ -99,15 +116,20 @@ export default function UsersTable() {
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Search className="h-4 w-4 text-gray-500" />
           </div>
+          {/* search */}
           <input
             type="text"
             placeholder="Quick search..."
+            onChange={(e)=> setSearch(e.target.value)}
             className="block w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-        <button className="flex items-center px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-gray-300 hover:bg-gray-700 transition-colors">
-          <Plus className="h-4 w-4 mr-1" />
-          <span>Add filters</span>
+        <button 
+        className="flex items-center px-3 py-2 bg-indigo-700 border border-gray-700 rounded-md text-gray-300 hover:bg-indigo-500 transition-colors"
+        onClick={handleSearch}
+        >
+          
+          <span>Search</span>
         </button>
       </div>
     
