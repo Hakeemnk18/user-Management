@@ -1,9 +1,11 @@
 const User = require('../../model/User')
 const mongoose = require('mongoose')
+
 const getUsers = async(req,res)=>{
     try {
-        console.log("inside get user admin")
-        const users = await User.find({role:'user'})
+        
+        const users = await User.find()
+        
         res.status(200).json({users:users})
     } catch (error) {
         console.log(error.message)
@@ -16,9 +18,6 @@ const editUser = async(req,res)=>{
         console.log("inside edit user")
         const {_id,name,email} = req.body
         console.log(req.body)
-        
-        const users = await User.find({_id:_id})
-        console.log(users)
         const updateUser = await User.findByIdAndUpdate(
             _id, 
             { 
@@ -30,7 +29,8 @@ const editUser = async(req,res)=>{
         if(!updateUser){
             return res.status(404).json({ message: 'User not found' });
         }
-        res.status(200).json({ok:true, user:updateUser})
+        console.log("user updated")
+        res.status(200).json({user:updateUser})
     } catch (error) {
         console.log(error.message)
         res.status(404).json({message:"error in server"})
