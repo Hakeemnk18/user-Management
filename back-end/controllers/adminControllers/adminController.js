@@ -40,12 +40,13 @@ const editUser = async(req,res)=>{
 const deleteUser = async (req,res) =>{
     try {
         console.log("inside delete")
-        const { id } = req.body
+        const { _id } = req.body
         console.log(req.body)
-        const users = await User.find({_id:id})
-        console.log(users)
-        const data = await User.findByIdAndDelete(id)
-
+        console.log(_id)
+        const user = await User.findById(_id)
+        console.log(user)
+        const data = await User.findByIdAndDelete(_id)
+        console.log(data)
         if(!data){
             return res.status(404).json({ message: 'User not found' });
         }
