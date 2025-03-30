@@ -5,6 +5,8 @@ import { useEffect, useState } from "react"
 import { Search, Upload, Layers, Settings2, Plus, ChevronDown } from "lucide-react"
 import axios from "axios"
 import { toast } from "react-toastify";
+import DeleteConfirmModal from "../modals/DeleteConfirmModal";
+import EditUserModal from "../modals/EditUserModal";
 
 
 
@@ -13,6 +15,8 @@ export default function UsersTable() {
   const [originalUsers,setOriginalUsers] = useState([])
   const [isModal,setIsModal] = useState(false)
   const [search,setSearch] = useState('')
+  const [toDelete,setToDelete] = useState(false)
+  const [selectDeleteUser,setSelectDeleteUser] = useState({})
   const [selectedUser,setSelectedUser] = useState({
     name:'',
     email:''
@@ -77,6 +81,42 @@ export default function UsersTable() {
     } catch (error) {
       console.log(error.message)
       toast.error(error.message)
+    }
+  }
+// delete
+  const handleDelete = (user) => {
+    setToDelete(true)
+    setSelectDeleteUser(user)
+  }
+
+  const deleteUser = async() => {
+    try {
+      
+      const token = localStorage.getItem('adminToken')
+      const response = await axios.delete("/api/admin/deleteUser", {
+        data: selectDeleteUser, 
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+      setToDelete(false)
+      const deleteUsers = originalUsers.filter((user)=>{
+        return user._id !== selectDeleteUser._id
+      })
+      setUsers(deleteUsers)
+      setOriginalUsers(deleteUsers)
+      toast.success("user deleted successfully")
+    } catch (error) {
+      if (error.response) {
+        
+        toast.error(error.response.data.message); 
+      } else if (error.request) {
+        
+        toast.error("No response from server!");
+      } else {
+        
+        toast.error(error.message);
+      }
     }
   }
 
@@ -161,47 +201,31 @@ export default function UsersTable() {
               >
               <FontAwesomeIcon icon={faEdit} className="text-blue-500 cursor-pointer" />
               </div>
-              <div className="text-gray-300 text-right">
+              <div className="text-gray-300 text-right"
+                onClick={()=>handleDelete(user)}
+              >
               <FontAwesomeIcon icon={faTrash} className="text-blue-500 cursor-pointer" />
               </div>
-
-              {/* modal */}
+              {/* delete modal */}
+              {
+                toDelete && 
+                <DeleteConfirmModal 
+                  onCancel={()=> setToDelete(false)}
+                  deleteUser={deleteUser}
+                  
+                />
+              }
+             
+              {/* edit modal */}
               {
                 isModal && 
-                <div className="w-[280px] bg-white p-4 shadow-lg rounded-lg absolute bottom-80 right-40">
-  
-                <button
-                  className="absolute top-2 right-4 text-gray-500 hover:text-red-500 font-bold"
-                  onClick={() => setIsModal(false)} // Replace with your close function
-                >
-                  ✕
-                </button>
-
-                
-                <form action="" className="flex flex-col space-y-3 mt-10">
-                  <input
-                    type="text"
-                    placeholder="Enter your name"
-                    value={selectedUser.name}
-                    onChange={(e)=> setSelectedUser({...selectedUser,name:e.target.value})}
-                    className="text-gray-500 placeholder-gray-500 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={selectedUser.email}
-                    onChange={(e)=> setSelectedUser({...selectedUser,email:e.target.value})}
-                    className="text-gray-500 placeholder-gray-500 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    type="submit"
-                    className="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
-                    onClick={handleEdit}
-                  >
-                    Submit
-                  </button>
-                </form>
-              </div>
+                <EditUserModal
+                  onClose={()=> setIsModal(false)}
+                  changeName={(e)=> setSelectedUser({...selectedUser,name:e.target.value})}
+                  selectedUser={selectedUser}
+                  changeEmail={(e)=> setSelectedUser({...selectedUser,email:e.target.value})}
+                  handleEdit={handleEdit}
+                />
               }
             </div>
           ))}
