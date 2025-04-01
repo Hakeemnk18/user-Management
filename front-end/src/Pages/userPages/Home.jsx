@@ -1,10 +1,13 @@
 import React from 'react'
-
+import Navbar from '../../Components/user/navbar/Navbar'
+import Profile from '../../Components/user/profile/Profile'
 const Home = () => {
   return (
-    <div className='text-9xl text-red-300'>
-      Welcome home
-    </div>
+    <>
+        <Navbar />
+        <Profile />
+    </>
+    
   )
 }
 
