@@ -7,11 +7,10 @@ const env = require('dotenv').config()
 const JWT_SECRET = process.env.JWT_SECRET
 const signUp = async(req,res)=>{
     try {
-        console.log("inside signup")
-        console.log(req.body)
+        
         const {name,password,email} = req.body
         const existUser = await User.findOne({email})
-        console.log(existUser)
+        
         if(existUser){
             return res.status(409).json({ message: 'User already exist' });
         }
@@ -46,29 +45,25 @@ const signUp = async(req,res)=>{
 
 const login = async(req,res)=>{
     try {
-        console.log("inside login")
+        
         const {email , password} = req.body
-        console.log(req.body)
-       
+    
         const user = await User.findOne({email})
 
         if (!user) {
           return res.status(401).json({ message: 'Invalid email or password' });
         }
-      
-        
+
         const isMatch = password === user.password
         if (!isMatch) {
           return res.status(401).json({ message: 'Invalid email or password' });
         }
       
-        
         const token = jwt.sign(
           { id: user._id, name: user.name, role: user.role },
           JWT_SECRET,
           { expiresIn: '1h' } 
         );
-        // //console.log("token ",token)
 
         return res.status(200).json({
             ok: true,
