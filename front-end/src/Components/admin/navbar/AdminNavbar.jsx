@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react"
 //import Link from "next/link"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faShield } from "@fortawesome/free-solid-svg-icons"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { removeAdmin } from "../../../store/slices/adminSlice"
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false)
   const admin = useSelector((store) => store?.admin?.user)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   console.log(admin , "inside nav")
 
   // Add scroll event listener to change navbar background on scroll
@@ -25,6 +28,12 @@ const Navbar = () => {
       window.removeEventListener("scroll", handleScroll)
     }
   }, [])
+
+  const logout = () => {
+    localStorage.removeItem('adminToken')
+    dispatch(removeAdmin())
+    navigate('/admin')
+  }
 
   return (
     <nav
@@ -51,13 +60,19 @@ const Navbar = () => {
           <Link href="/contact" className="text-gray-400 hover:text-indigo-700 transition-colors">
             Contact Us
           </Link>
+          {
+            admin ? <button 
+            className="bg-indigo-900 text-white px-6 py-2 rounded hover:bg-indigo-800 transition-colors"
+            onClick={logout}
+            >
+            Logout
+          </button> :
           <button className="bg-indigo-900 text-white px-6 py-2 rounded hover:bg-indigo-800 transition-colors">
-            {admin ? 'Logout' : 'Login'}
+          Login
           </button>
+          }
+          
         </div>
-
-        {/* Login Button */}
-        
 
         {/* Mobile Menu Button - Hidden on desktop */}
         <div className="md:hidden">

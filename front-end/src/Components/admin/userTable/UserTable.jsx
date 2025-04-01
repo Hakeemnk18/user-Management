@@ -7,6 +7,7 @@ import axios from "axios"
 import { toast } from "react-toastify";
 import DeleteConfirmModal from "../modals/DeleteConfirmModal";
 import EditUserModal from "../modals/EditUserModal";
+import CreateUserModal from "../modals/CreateUserModal";
 
 
 
@@ -17,6 +18,8 @@ export default function UsersTable() {
   const [search,setSearch] = useState('')
   const [toDelete,setToDelete] = useState(false)
   const [selectDeleteUser,setSelectDeleteUser] = useState({})
+  const [createModal,setCreateModal] = useState(false)
+  const [userCreated, setUserCreated] = useState(false);
   const [selectedUser,setSelectedUser] = useState({
     name:'',
     email:''
@@ -122,7 +125,7 @@ export default function UsersTable() {
 
   useEffect(()=>{
     fetchUser()
-  },[])
+  },[userCreated])
 
   return (
     <div className="min-h-screen bg-gradient-to-tl from-indigo-950 to-gray-900 text-gray-100 p-6 pt-25">
@@ -230,7 +233,23 @@ export default function UsersTable() {
             </div>
           ))}
         </div>
+        
       </div>
+      <div className="text-right mt-6">
+      <button 
+      className="bg-green-700 text-white px-6 py-2 rounded hover:bg-green-400 transition-colors"
+      onClick={()=> setCreateModal(true)}
+      >Create User</button>
+      </div>
+     {/* create user modal */}
+      {
+        createModal &&
+        <CreateUserModal 
+          closeModal={() => setCreateModal(false)}
+          setUserCreated={setUserCreated}
+        />
+      }
+     
     </div>
     </div>
   )
