@@ -237,7 +237,7 @@ export default function UsersTable() {
       </div>
       <div className="text-right mt-6">
       <button 
-      className="bg-green-700 text-white px-6 py-2 rounded hover:bg-green-400 transition-colors"
+      className="bg-green-700 text-white px-6 py-2 rounded hover:bg-green-400 transition-colors cursor-pointer"
       onClick={()=> setCreateModal(true)}
       >Create User</button>
       </div>
