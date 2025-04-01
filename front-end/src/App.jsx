@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 
 function App() {
-  console.log("inside app")
+  
   return (
     <>
       <ToastContainer theme="dark" />
