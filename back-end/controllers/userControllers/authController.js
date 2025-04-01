@@ -10,7 +10,11 @@ const signUp = async(req,res)=>{
         console.log("inside signup")
         console.log(req.body)
         const {name,password,email} = req.body
-
+        const existUser = await User.findOne({email})
+        console.log(existUser)
+        if(existUser){
+            return res.status(409).json({ message: 'User already exist' });
+        }
         const user = new User({
             name:name,
             password:password,
@@ -33,6 +37,7 @@ const signUp = async(req,res)=>{
             role: data.role,
             email:data.email
         })
+        
     } catch (error) {
         console.log("error in signUp "+error.message)
         res.status(404).json({message:"error in server"})
@@ -44,6 +49,7 @@ const login = async(req,res)=>{
         console.log("inside login")
         const {email , password} = req.body
         console.log(req.body)
+       
         const user = await User.findOne({email})
 
         if (!user) {
@@ -62,9 +68,9 @@ const login = async(req,res)=>{
           JWT_SECRET,
           { expiresIn: '1h' } 
         );
-        //console.log("token ",token)
+        // //console.log("token ",token)
 
-        res.status(200).json({
+        return res.status(200).json({
             ok: true,
             token,
             name: user.name,
@@ -75,6 +81,7 @@ const login = async(req,res)=>{
         })
     } catch (error) {
         res.status(404).json({message:"error in server"})
+        console.log(error.message)
     }
 }
 
