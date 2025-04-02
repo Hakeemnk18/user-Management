@@ -24,6 +24,30 @@ const edit = async(req,res) => {
     }
 }
 
+const uploadImage = async(req,res)=>{
+    try {
+        console.log("inside image upload")
+        console.log(req.body)
+        const { _id, imageUrl} = req.body
+
+        const updateImage = await User.findByIdAndUpdate(
+            _id,
+            {
+                $set : { imgURL: imageUrl }
+            },
+            { new: true}
+        )
+        if(!updateImage){
+            return res.status(404).json({message:"User not found"})
+        }
+        res.status(200).json({message:"image upload successfully"})
+    } catch (error) {
+        console.log("error in image upload "+error.message)
+        res.status(404).json({message:"error in server"})
+    }
+}
+
 module.exports = {
-    edit
+    edit,
+    uploadImage
 }

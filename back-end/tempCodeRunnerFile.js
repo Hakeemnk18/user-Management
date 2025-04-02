@@ -1,1 +1,1 @@
-/api/admin
+app.use('/api',userRoutes)
