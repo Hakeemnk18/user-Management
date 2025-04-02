@@ -3,10 +3,12 @@ import { Facebook, Instagram, Pencil, Twitter, Sparkles } from "lucide-react"
 import GradientIcon from '../icon/GradientIcon'
 import { useSelector } from 'react-redux'
 import EditUserModal from '../modal/EditUserModal'
+import UploadImage from '../modal/UploadImage'
 
 const Profile = () => {
     const user = useSelector((store) => store.user.user)
     const [isEditForm,setIsEditForm] = useState(false)
+    const [isImageModal,setIsImageModal] = useState(false)
     
     return (
         <div className="min-h-screen bg-gradient-to-tl from-indigo-950 to-gray-900 text-gray-100 p-6 pt-25 flex justify-center items-center">
@@ -15,8 +17,12 @@ const Profile = () => {
                 <div className="bg-gradient-to-tl from-indigo-950 to-blue-600 text-white text-center flex flex-col items-center justify-center md:w-2/5 h-full">
                     <div className="relative">
                         <div className="w-31 h-31  rounded-full mx-auto mb-4 flex items-center justify-center">
-                            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" className="w-30 h-30 rounded-full" />
-                            <div className="absolute top-0 right-0 bg-gray-500 p-2 rounded-full">
+                            <img 
+                            src={user?.imgURL ? user.imgURL :
+                                "https://cdn-icons-png.flaticon.com/512/149/149071.png" 
+                            } 
+                            className="w-30 h-30 rounded-full" />
+                            <div className="absolute top-0 right-0 bg-gray-500 p-2 rounded-full" onClick={()=> setIsImageModal(true)}>
 
                                 <Pencil size={10} />
                             </div>
@@ -87,6 +93,13 @@ const Profile = () => {
                 onCancel={()=> setIsEditForm(false)}
                 
             />
+            }
+            {/* image modal */}
+            {
+                isImageModal && 
+                <UploadImage 
+                onCancel={()=> setIsImageModal(false)}
+                />
             }
             
         </div>
