@@ -27,7 +27,7 @@ const UploadImage = ({onCancel}) => {
                 imageUrl:response.data.secure_url,
                 _id:user._id
             }
-            console.log(imageObj)
+            
             const res = await axios.post('/api/imageUpload',imageObj)
             dispatch(addUser({...user,imgURL:imageObj.imageUrl}))
             toast.success("Image uploaded successfully!")

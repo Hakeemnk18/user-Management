@@ -43,11 +43,12 @@ const Login = () => {
         try {
           const response = await axios.post('/api/signup', formData);
           localStorage.setItem('userToken',response.data.token)
+          
           dispatch(addUser({
             name:response.data.name,
             _id:response.data._id,
             role:response.data.role,
-            email:response.data.email
+            email:response.data.email,
           }))
           toast.success("User created successfully");
           navigate('/home')
@@ -66,7 +67,8 @@ const Login = () => {
             name:response.data.name,
             _id:response.data._id,
             role:response.data.role,
-            email:response.data.email
+            email:response.data.email,
+            imgURL:response.data.imgURL
           }))
           toast.success("Login successful");
           navigate('/home')

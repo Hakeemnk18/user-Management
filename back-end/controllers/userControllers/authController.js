@@ -34,7 +34,7 @@ const signUp = async(req,res)=>{
             name: data.name,
             _id: data._id,
             role: data.role,
-            email:data.email
+            email:data.email,
         })
         
     } catch (error) {
@@ -64,15 +64,15 @@ const login = async(req,res)=>{
           JWT_SECRET,
           { expiresIn: '1h' } 
         );
-
+        
         return res.status(200).json({
             ok: true,
             token,
             name: user.name,
             _id: user._id,
             role: user.role,
-            email:user.email
-
+            email:user.email,
+            imgURL:user.imgURL
         })
     } catch (error) {
         res.status(404).json({message:"error in server"})
