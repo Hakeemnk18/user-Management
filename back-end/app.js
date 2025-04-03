@@ -7,6 +7,8 @@ const userRoutes = require('./routes/userRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const http = require('http')
 const { Server } = require('socket.io'); 
+const path = require('path')
+
 db()
 
 const server = http.createServer(app); // Create an HTTP server with Express
@@ -17,6 +19,8 @@ const io = new Server(server, {
 
 const PORT = 5000
 
+
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({ extended: true }));

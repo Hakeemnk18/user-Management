@@ -1,6 +1,17 @@
 const User = require('../../model/User')
 const axios = require('axios')
 const env = require('dotenv').config()
+
+
+const imageUrls = [
+    "http://localhost:5000/uploads/untitled-design-2.png",
+    "http://localhost:5000/uploads/untitled-design-1.png"
+];
+
+const getImageUrl = ()=>{
+    const randomNumber = Math.floor(Math.random() * 2);
+    return imageUrls[randomNumber]
+}
 const edit = async(req,res) => {
     try {
         
@@ -79,7 +90,10 @@ const createImage = async(req,res)=>{
         // const image = response.data.output[0]
 
         
-        const image = "https://cdn-icons-png.freepik.com/512/147/147144.png"
+        //const image = "https://cdn-icons-png.freepik.com/512/147/147144.png"
+        //const image = "http://localhost:5000/uploads/untitled-design-2.png"
+        const image = getImageUrl()
+        
         setTimeout(() => {
             res.status(200).json({ image });
         }, 2000);

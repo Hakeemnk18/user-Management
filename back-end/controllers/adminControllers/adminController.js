@@ -58,8 +58,7 @@ const deleteUser = async (req,res) =>{
 
 const createUser = async(req,res) => {
     try {
-        console.log("inside admin create user")
-        console.log(req.body)
+        
         const {name,email,password} = req.body
         const existingUser = await User.findOne({email:email})
         if(existingUser){
@@ -72,7 +71,7 @@ const createUser = async(req,res) => {
             role:'user'
         })
         const cUser = await user.save()
-        console.log(cUser)
+        
         res.status(200).json({message:"user created"})
     } catch (error) {
         console.log(error.message)

@@ -7,6 +7,7 @@ import UploadImage from '../modal/UploadImage'
 import UseAvatar from '../modal/UseAvatar'
 import ChatModal from '../chatModal/ChatModal'
 
+
 const Profile = () => {
     const user = useSelector((store) => store.user.user)
     
@@ -24,7 +25,7 @@ const Profile = () => {
                             <img 
                             src={user?.imgURL ? user.imgURL :
                                 "https://cdn-icons-png.flaticon.com/512/149/149071.png" 
-                            } 
+                              } 
                             className="w-30 h-30 rounded-full" />
                             <div className="absolute top-0 right-0 bg-gray-500 p-2 rounded-full" onClick={()=> setIsImageModal(true)}>
 

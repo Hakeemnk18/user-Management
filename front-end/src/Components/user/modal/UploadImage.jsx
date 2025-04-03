@@ -27,8 +27,12 @@ const UploadImage = ({onCancel}) => {
                 imageUrl:response.data.secure_url,
                 _id:user._id
             }
-            
-            const res = await axios.post('/api/imageUpload',imageObj)
+            const token = localStorage.getItem('userToken')
+            const res = await axios.post('/api/imageUpload',imageObj,{
+              headers:{
+                Authorization: `Bearer ${token}`,
+              }
+            })
             dispatch(addUser({...user,imgURL:imageObj.imageUrl}))
             toast.success("Image uploaded successfully!")
             

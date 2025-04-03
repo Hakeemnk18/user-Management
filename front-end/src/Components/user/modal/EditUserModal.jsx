@@ -38,7 +38,12 @@ const EditUserModal = ({onCancel}) => {
       console.log('object is empty')
       setErrors(newError)
       try {
-        const response = await axios.put('/api/editUser',formData)
+        const token = localStorage.getItem('userToken')
+        const response = await axios.put('/api/editUser',formData,{
+          headers:{
+            Authorization: `Bearer ${token}`,
+          }
+        })
         dispatch(addUser(response.data.user))
         toast.success("user edited")
         
