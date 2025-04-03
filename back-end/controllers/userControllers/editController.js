@@ -1,8 +1,9 @@
 const User = require('../../model/User')
+const axios = require('axios')
+const env = require('dotenv').config()
 const edit = async(req,res) => {
     try {
-        console.log("inside edit user")
-        console.log(req.body)
+        
         const {_id,name,email} = req.body
         
         const updateUser = await User.findByIdAndUpdate(
@@ -26,8 +27,7 @@ const edit = async(req,res) => {
 
 const uploadImage = async(req,res)=>{
     try {
-        console.log("inside image upload")
-        console.log(req.body)
+        
         const { _id, imageUrl} = req.body
 
         const updateImage = await User.findByIdAndUpdate(
@@ -47,7 +47,51 @@ const uploadImage = async(req,res)=>{
     }
 }
 
+
+
+const createImage = async(req,res)=>{
+    try {
+        
+        
+        
+        //const image = response.data.output[0]
+
+        // const API_URL = "https://modelslab.com/api/v6/realtime/text2img";
+        // const data = {
+        //     key: process.env.MODEL_LAB_API_KEY,
+        //     prompt: "Generate a high-quality AI user avatar, professional, single person, neutral background, centered composition, studio lighting, sharp details, realistic skin texture, natural facial expression",
+        //     negative_prompt: "poor quality, multiple people, extra faces, distorted features, blurry, low-resolution, unrealistic, asymmetry, exaggerated expressions, watermark, text, artifacts, low detail, noise",
+        //     width: "512",
+        //     height: "512",
+        //     samples: "1",
+        //     safety_checker: false,
+        //     seed: null,
+        //     instant_response: false,
+        //     base64: false,
+        //     webhook: null,
+        //     track_id: null,
+        //     enhance_prompt: true,
+        //     enhance_style: "cinematic-diva"
+        // };
+        // JSON.stringify(data)
+        // const response = await axios.post(API_URL, data);
+        
+        // const image = response.data.output[0]
+
+        
+        const image = "https://cdn-icons-png.freepik.com/512/147/147144.png"
+        setTimeout(() => {
+            res.status(200).json({ image });
+        }, 2000);
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: "API request failed" });
+    }
+}
+
+
 module.exports = {
     edit,
-    uploadImage
+    uploadImage,
+    createImage
 }

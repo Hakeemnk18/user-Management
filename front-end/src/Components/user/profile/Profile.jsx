@@ -4,11 +4,14 @@ import GradientIcon from '../icon/GradientIcon'
 import { useSelector } from 'react-redux'
 import EditUserModal from '../modal/EditUserModal'
 import UploadImage from '../modal/UploadImage'
+import UseAvatar from '../modal/UseAvatar'
 
 const Profile = () => {
     const user = useSelector((store) => store.user.user)
+    
     const [isEditForm,setIsEditForm] = useState(false)
     const [isImageModal,setIsImageModal] = useState(false)
+    const [isUseAvatar,setIsUseAvatar] = useState(false)
     
     return (
         <div className="min-h-screen bg-gradient-to-tl from-indigo-950 to-gray-900 text-gray-100 p-6 pt-25 flex justify-center items-center">
@@ -34,7 +37,9 @@ const Profile = () => {
                     <button className="p-2 flex items-center justify-center space-x-2 cursor-pointer rounded-lg">
                         <span className="flex items-center space-x-2">
                             <GradientIcon />
-                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-rose-500 font-semibold">
+                            <span 
+                            onClick={()=> setIsUseAvatar(true)}
+                            className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-rose-500 font-semibold">
                                 Use Avatar
                             </span>
                         </span>
@@ -52,21 +57,21 @@ const Profile = () => {
                         </div>
 
                         {/* User Information */}
-                        <div className="flex flex-col justify-center items-center flex-grow">
-                            <div className="grid grid-cols-2 gap-25 mb-6 pl-21">
-                                <div>
+                        <div className="flex flex-col justify-center items-start pl-22 ">
+                            <div className="mb-6 ">
+                                <div >
                                     <p className="text-gray-500 font-medium">Email</p>
                                     <p className="text-gray-200 text-sm">{user.email}</p>
                                 </div>
-                                <div></div>
+                                
                             </div>
 
-                            <div className="grid grid-cols-2 gap-25 mb-6">
+                            <div className=" mb-6 ">
                                 <div>
                                     <p className="text-gray-500 font-medium">Phone</p>
                                     <p className="text-gray-200 text-sm">9825254620</p>
                                 </div>
-                                <div></div>
+                                
                             </div>
                         </div>
 
@@ -99,6 +104,13 @@ const Profile = () => {
                 isImageModal && 
                 <UploadImage 
                 onCancel={()=> setIsImageModal(false)}
+                />
+            }
+            {/* use avatar modal */}
+            {
+                isUseAvatar &&
+                <UseAvatar 
+                 onCancel={()=> setIsUseAvatar(false)}
                 />
             }
             

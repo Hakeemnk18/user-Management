@@ -10,4 +10,6 @@ router.post('/signup',authController.signUp)
 router.put('/editUser',editController.edit)
 router.post('/imageUpload',editController.uploadImage)
 
+router.get('/generate-avatars',editController.createImage)
+
 module.exports = router
