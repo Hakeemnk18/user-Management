@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import EditUserModal from '../modal/EditUserModal'
 import UploadImage from '../modal/UploadImage'
 import UseAvatar from '../modal/UseAvatar'
+import ChatModal from '../chatModal/ChatModal'
 
 const Profile = () => {
     const user = useSelector((store) => store.user.user)
@@ -90,6 +91,7 @@ const Profile = () => {
                             </div>
                         </div>
                 </div>
+                <ChatModal />
             </div>
             {/* edit form modal */}
             {

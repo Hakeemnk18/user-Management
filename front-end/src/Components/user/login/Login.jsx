@@ -7,7 +7,7 @@ import { addUser } from '../../../store/slices/userSlice'
 import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
-    console.log("inside login user")
+    
     const [showPassword, setShowPassword] = useState(false)
     const [signinStatus,setSigninStatus] = useState(false)
     const [errors,setErrors] = useState({})
@@ -93,11 +93,11 @@ const Login = () => {
     // handle form submit
       const handleSubmit = async(e) => {
         e.preventDefault()
-        console.log("inside handle submit")
+        
         const newError = validate()
     
         if(Object.keys(newError).length === 0){
-          console.log('object is empty')
+          
           setErrors(newError)
           signinStatus ? await handleSignup() : await handleLogin()
     
