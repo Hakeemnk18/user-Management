@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import DeleteConfirmModal from "../modals/DeleteConfirmModal";
 import EditUserModal from "../modals/EditUserModal";
 import CreateUserModal from "../modals/CreateUserModal";
+import ChatModal from "../chatModal/ChatModal";
 
 
 
@@ -188,7 +189,7 @@ export default function UsersTable() {
 
              <div className="flex items-center space-x-3 w-full">
                 <img
-                  src={user.avatar || "/placeholder.svg"}
+                  src={user.imgURL || "/placeholder.svg"}
                   alt={`${user.name}'s avatar`}
                   className="w-10 h-10 rounded-full mr-3 bg-gray-700 "
                 />
@@ -209,6 +210,14 @@ export default function UsersTable() {
               >
               <FontAwesomeIcon icon={faTrash} className="text-blue-500 cursor-pointer" />
               </div>
+              <div className="text-gray-300 text-right"
+                
+              >
+              <ChatModal 
+                currentUserId={user._id}
+              />
+              </div>
+              
               {/* delete modal */}
               {
                 toDelete && 
@@ -230,6 +239,7 @@ export default function UsersTable() {
                   handleEdit={handleEdit}
                 />
               }
+              
             </div>
           ))}
         </div>
@@ -251,6 +261,7 @@ export default function UsersTable() {
       }
      
     </div>
+    
     </div>
   )
 }
