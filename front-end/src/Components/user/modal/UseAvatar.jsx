@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { addUser } from '../../../store/slices/userSlice';
 
+
 const UseAvatar = ({onCancel}) => {
     const [avatars, setAvatars] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,7 +17,14 @@ const UseAvatar = ({onCancel}) => {
     const generateAvatars = async () => {
         try {
             setIsCreateAvatarLoading(true)
-          const response = await axios.get('/api/generate-avatars')
+            const token = localStorage.getItem('userToken')
+          const response = await axios.get('/api/generate-avatars',{
+            headers:{
+              
+              Authorization: `Bearer ${token}`,
+              
+            }
+          })
            
            setImageUrl(response.data.image)
            setIsCreateAvatarLoading(false)
@@ -34,8 +42,12 @@ const UseAvatar = ({onCancel}) => {
                 imageUrl:imageUrl,
                 _id:user._id
             }
-            
-            const res = await axios.post('/api/imageUpload',imageObj)
+            const token = localStorage.getItem('userToken')
+            const res = await axios.post('/api/imageUpload',imageObj,{
+              headers:{
+                Authorization: `Bearer ${token}`,
+              }
+            })
             dispatch(addUser({...user,imgURL:imageObj.imageUrl}))
             toast.success("Image uploaded successfully!")
         } catch (error) {

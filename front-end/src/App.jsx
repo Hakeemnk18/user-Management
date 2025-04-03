@@ -2,7 +2,7 @@ import { Provider } from 'react-redux';
 import appStore from './store/store';
 import { ToastContainer } from 'react-toastify';
 import { Outlet } from 'react-router-dom';
-import Navbar from './Components/Navbar';
+
 
 function App() {
   

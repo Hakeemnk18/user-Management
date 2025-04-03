@@ -7,7 +7,7 @@ const CreateUserModal = ({closeModal,setUserCreated}) => {
   const [formData,setFormData] = useState({
     name:'',
     email:'',
-    password:''
+    password:'',
   })
   const [errors,setErrors] = useState({})
 
@@ -33,8 +33,13 @@ const CreateUserModal = ({closeModal,setUserCreated}) => {
     if(Object.keys(newError).length === 0){
       console.log('object is empty')
       setErrors(newError)
+      const token = localStorage.getItem('adminToken')
       try {
-        const response = await axios.post('/api/admin/createUser',formData)
+        const response = await axios.post('/api/admin/createUser',formData,{
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        })
         toast.success("user created")
         setUserCreated(true)
         
